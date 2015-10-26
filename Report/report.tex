@@ -5,6 +5,8 @@
 \usepackage{amssymb}
 \usepackage[]{algorithm2e}
 \usepackage{graphicx}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+
 \begin{document}
 
 \title{LINGI2261: Artificial Intelligence \\
@@ -15,9 +17,41 @@ Assignement 3 : Adversarial Search}
 
 \section{Alpha-Beta search}
 
+\subsection{Perform the MiniMax algorithm on the tree in Figure 1, i.e. put a value to each node. Circle the move the root player should do.}
+
+\begin{figure}[h]
+\includegraphics[scale=0.4]{img/minimax.jpg} 
+\caption{\label{minimax} MiniMax}
+\end{figure}
+
+\subsection{Perform the Alpha-Beta algorithm on the tree in Figure 2. At each non terminal node, put the successive values of $ \alpha $ and $ \beta $. Cross out the arcs reaching non visited nodes. Assume a left-to-right node expansion.}
+
+\begin{figure}[h]
+\includegraphics[scale=0.4]{img/alphabeta_left.jpg} 
+\caption{\label{alphabetaleft} Alpha-Beta, left-to-right expansion}
+\end{figure}
+
+\subsection{Do the same, assuming a right-to-left node expansion instead (Figure 3).}
+
+\begin{figure}[h]
+\includegraphics[scale=0.4]{img/alphabeta_right.jpg} 
+\caption{\label{alphabetaright} Alpha-Beta, right-to-left expansion}
+\end{figure}
+
+\subsection{Can the nodes be ordered in such a way that Alpha-Beta pruning can cut off more branches (in a left-to right node expansion)? If no, explain why; if yes, give the new ordering and the resulting new pruning.}
+
+Yes, if we order the nodes in increasing order like shown in Figure \ref{alphabetanodes}, the Alpha-Beta pruning will cut off more branches. The nodes must be set in that order because it's MIN that chooses the action to pick in the bottom of the tree.
+
+\begin{figure}[h]
+\includegraphics[scale=0.4]{img/alphabeta_nodes.jpg} 
+\caption{\label{alphabetanodes} Alpha-Beta, left-to-right expansion}
+\end{figure}
+
 \section{Avalam}
 
 \subsection{A basic Alpha-Beta Agent}
+
+The basic Alpha-Beta Agent can be found on INGInious.
 
 \subsection{Comparison of two evalutaion functions}
 
