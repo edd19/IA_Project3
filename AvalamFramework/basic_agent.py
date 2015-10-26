@@ -34,16 +34,16 @@ class Agent:
         p is the player to play the next move and st is the next
         step number.
         """
-        for action in state.get_actions():
-            yield state.clone().play_action(action)
+        for action in state[0].get_actions():
+            yield (action, (state[0].clone().play_action(action), state[1]*-1, state[2]+1))
 
     def cutoff(self, state, depth):
         """The cutoff function returns true if the alpha-beta/minimax
         search has to stop; false otherwise.
         """
-        if state.is_finished():
+        if state[0].is_finished():
             return True
-        if depth == 3:
+        if depth > 1:
             return True
         return False
 
@@ -51,7 +51,7 @@ class Agent:
         """The evaluate function must return an integer value
         representing the utility function of the board.
         """
-        score = state.get_score()
+        score = state[0].get_score()
         if score > 0:
             return 1
         elif score < 0:
