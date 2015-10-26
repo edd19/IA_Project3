@@ -41,7 +41,11 @@ class Agent:
         """The cutoff function returns true if the alpha-beta/minimax
         search has to stop; false otherwise.
         """
-        pass
+        if state.is_finished():
+            return True
+        if depth == 3:
+            return True
+        return False
 
     def evaluate(self, state):
         """The evaluate function must return an integer value
