@@ -57,6 +57,6 @@ The basic Alpha-Beta Agent can be found on INGInious.
 
 \subsubsection{Launch a game where one of the agents is the basic agent described before against another agent where the basic evaluate method has been replaced such that it returns directly the result of Board.get\_score instead of -1, 0 or 1. Watch the replay of the match. What do you observe? Does one of the agent clearly overcomes the other one? Explain why there is such a difference.}
 
-We observe that that each player decreased the score of his opponent by one. Also the two players play first in the top of the board and finish at the bottom. Thus the first player has a huge advantage. This is due to the fact that the cutoff method don't permit depth higher than 2 and also because their two evaluations methods are essentially the same.
+A first observation is that the player to play first is the one winning the game. But a second observation is that the agent with it's evaluation function equals to the Board.get\_score method is the one winning with a greater margin. The reason that this agent wins with a higher margin is that it's evaluation function returns values different than 0, 1 or -1. Thus, it can describes  losing states that are, for example, more disadvantageous for him whereas the other one will classify all the losing states as the same.
 
 \end{document}
