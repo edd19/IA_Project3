@@ -137,6 +137,18 @@ class Board:
                     if self.is_action_valid(action):
                         yield action
 
+    def get_tower_actions_bis(self, i, j):
+        """Yield all actions with moving tower (i,j)"""
+        h = abs(self.m[i][j])
+        actions = []
+        if h > 0 and h < self.max_height:
+            for di in (-1, 0, 1):
+                for dj in (-1, 0, 1):
+                    action = (i, j, i+di, j+dj)
+                    if self.is_action_valid(action):
+                        actions.append(action)
+        return actions
+
     def is_tower_movable(self, i, j):
         """Return wether tower (i,j) is movable"""
         for action in self.get_tower_actions(i, j):
@@ -199,6 +211,43 @@ class Board:
                     elif self.m[i][j] == self.max_height:
                         score += 1
         return score
+    def get_players_score(self):
+        score1 = 0
+        score2 = 0
+        for i in range(self.rows):
+            for j in range(self.columns):
+                if self.m[i][j] < 0:
+                    score2 += 1
+                elif self.m[i][j] > 0:
+                    score1 += 1
+        return (score1, score2)
+
+    def get_evaluation(self):
+        score = 0
+        for i in range(self.rows):
+            for j in range(self.columns):
+                if self.m[i][j] == -3:
+                    n=0 # number of 1 next to the 3
+                    for action in self.get_tower_actions(i,j):
+                        if self.m[action[2]][action[3]] == 1:
+                            n += 1 # Peut etre faire un break
+                    if n>=2:
+                        score += 2     
+
+                elif self.m[i][j] < 0:
+                    score -= 1
+                elif self.m[i][j] > 0:
+                    score += 1
+
+        if score == 0:
+            for i in range(self.rows):
+                for j in range(self.columns):
+                    if self.m[i][j] == -self.max_height:
+                        score -= 1
+                    elif self.m[i][j] == self.max_height:
+                        score += 1
+        return score        
+
 
 
 def load_percepts(filename):

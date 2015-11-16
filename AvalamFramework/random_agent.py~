@@ -19,7 +19,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 """
 
 import random
-import avalam
+from avalam import *
 
 class Agent:
 
