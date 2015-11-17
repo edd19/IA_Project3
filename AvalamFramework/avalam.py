@@ -137,6 +137,18 @@ class Board:
                     if self.is_action_valid(action):
                         yield action
 
+    def get_tower_actions_bis(self, i, j):
+        """Return all actions with moving tower (i,j)"""
+        h = abs(self.m[i][j])
+        actions = []
+        if h > 0 and h < self.max_height:
+            for di in (-1, 0, 1):
+                for dj in (-1, 0, 1):
+                    action = (i, j, i+di, j+dj)
+                    if self.is_action_valid(action):
+                        actions.append(action)
+        return actions
+
     def is_tower_movable(self, i, j):
         """Return wether tower (i,j) is movable"""
         for action in self.get_tower_actions(i, j):
@@ -199,6 +211,63 @@ class Board:
                     elif self.m[i][j] == self.max_height:
                         score += 1
         return score
+
+    def get_players_score(self):
+        """ Return the score of current player and opponent player. """
+        score1 = 0
+        score2 = 0
+        for i in range(self.rows):
+            for j in range(self.columns):
+                if self.m[i][j] < 0:
+                    score2 += 1
+                elif self.m[i][j] > 0:
+                    score1 += 1
+        return (score1, score2)
+
+    def get_evaluation(self):
+        """ Evaluation method for the evaluate function of an agent.
+            Return the difference of towers between the two players.
+            It it's zero, return the difference of towers of height 3 of
+            the opponent surrounded by at least two towers of height 2 of the player.
+            If it's zero, return the difference of tower of height 5 between
+            the two players. """
+        score = 0
+        #Number of towers
+        for i in range(self.rows):
+            for j in range(self.columns):
+                if self.m[i][j] < 0:
+                    score -= 1
+                elif self.m[i][j] > 0:
+                    score += 1
+        if score == 0:
+        #Number of towers of height 3 surrounded
+            for i in range(self.rows):
+                for j in range(self.columns):
+                    actions = self.get_tower_actions_bis(i,j)
+                    if self.m[i][j] == -3:
+                        n=0
+                        for action in actions:
+                            if self.m[action[2]][action[3]] == 1:
+                                n += 1
+                        if n >=2:
+                            score += 1
+                    elif self.m[i][j] == 3:
+                        n=0
+                        for action in actions:
+                            if self.m[action[2]][action[3]] == -1:
+                                n += 1
+                        if n >=2:
+                            score -= 1
+        if score == 0:
+        #Number of towers of height 5
+            for i in range(self.rows):
+                for j in range(self.columns):
+                    if self.m[i][j] == -self.max_height:
+                        score -= 1
+                    elif self.m[i][j] == self.max_height:
+                        score += 1
+        return score
+
 
 
 def load_percepts(filename):
@@ -267,6 +336,6 @@ class Agent:
         ArgumentParser and the options dictionary. It can be used to
         configure the agent based on the custom options. (None to
         disable)
-  
+
     """
     pass
