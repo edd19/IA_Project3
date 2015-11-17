@@ -54,8 +54,14 @@ class Agent:
         search has to stop; false otherwise.
         """
         max_depth = 1
-        if state[2] > 20:
+        #Upgrade the depth depending on the step number
+        if state[2] > 30:
+            max_depth = 10
+        elif state[2] > 25:
+            max_depth = 3
+        elif state[2] > 20:
             max_depth = 2
+
         if state[0].is_finished():
             return True
         if depth > max_depth:
