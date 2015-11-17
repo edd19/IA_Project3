@@ -68,26 +68,43 @@ A first observation is that the player to play first is the one winning the game
 
 
 \subsection{Describe precisely your evaluation function.}
+Our conception of the evaluation function cames from a simple observation. If a player has a tower of height 3 surrounded by at least two opponents tower of height 1, the opponent has a very high probability to complete a tower. By that we mean a tower of height 5. Thus we avoid to have a situation where we have a tower of height 3 surrounded by two opponent towers of height 1 but we try to have situation where we surround opponents tower of height 3 by at least two of our tower of height 1. \\
+Our evaluate function gives greater value when we surround opponents tower of three but lower value in the opposite case. This is done in case the two players have the same score. By the score we mean the number of towers owned. \\
+At last, if the score and the number of towers surrounded are the same for the two players, we consider the towers of height 5 to determine the value of the state.
+The figure .... explains the advantage created by our evaluation function.
+In all cases presented, the owner of the towers of height 1 will have the upper-hand
 
 \subsection{Give an upper and a lower bound on the branching factor for a search tree on the Avalam game. Justify your answer.}
 
-An upper bond for the branching factor could be 48*8=\textbf{384}. The number \textit{48} represents the number of counters at the beginning of the game. Each of these counters can be moved in \textit{8} directions (except the one on the borders but it's easier to neglect that). By multiplicating these two numbers we obtain the number of moves we can do at the beginning of the game which is the upper bound for the branching factor. \\
+An upper bond for the branching factor could be 48*8=\textbf{384}. The number \textit{48} represents the number of counters at the beginning of the game. Each of these counters can be moved in \textit{8} directions (we put an upper bond by supposing that the towers on the borders can move in 8 directions). By multiplicating these two numbers we obtain the number of moves we can do at the beginning of the game which is the upper bound for the branching factor. \\
 
-Thus a lower bound would be \textbf{2}, which represents the fact that we can only move two towers (or counters) towards each one. This is due to the fact that if we can move a tower towards another one then the reciprocal can be done also. 
+Thus a lower bound would be \textbf{2}, which represents the fact that we can only move two towers (or counters) towards each other. This is due to the fact that if we can move a tower towards another one then the reciprocal can be done also. 
 
 \subsection{How does the branching factor evolve after a move has been performed? Explain.}
 
-The branching factor decreases after a move has been performed. If we move a counter (or tower) on another counter (or tower), then the number of possible moves decreases by a minimum value of 2 which is the possibility for counter A to move on counter B and the reciprocal. Also by moving a counter or tower we obtain fewer counters and towers. Thus there is fewer possibilities for counters to be moved.
+The branching factor decreases after a move has been performed. If we move a counter (or tower) on another counter (or tower), then the number of possible moves decreases by a minimum value of 2 which is the possibility for counter A to move on counter B and the reciprocal. Also by moving a counter or tower we obtain fewer counters and towers. Thus there is fewer possibilities for counters to be moved because the number of empty spaces increase and there are other situations where for example we can't put a tower of height 2 on a tower of height 4.
 
 \subsection{Can you think of states that might be ignored? What do you loose if you ignore successors? Explain.}
 
-States that can be ignored are:
+States that can be ignored are the one where we decrease our score especially:
 \begin{itemize}
-\item Creating towers when not needed.
-\item Give a tower to the opponent. That case can occur by forming a tower of five counters for the opponent, or forming a tower with opponent counter at top and don't have the possibility to regain that tower.
+\item Put an opponent tower on one of our tower
+\item One of our tower on another of our tower. This action should only be done at end of the game when we don't have the choice.
 \end{itemize}
 
+But we found other states that can be ignored because they lead to bad situations:
+
+\begin{itemize}
+\item Give a tower to the opponent. That case can occur by forming a tower of height five for the opponent, or forming a tower with opponent counter at top and we don't have the possibility to regain that tower. By that we mean that the tower cannot be moved (for example if the tower become isolated).
+\item Create a tower of height $x$ next to a tower of height $5-x$ with a different color in the neighborhood. This is a very bad situation where the opponent can exploit that to create directly a tower of height 5. 
+\end{itemize}
+
+But if we have a tower of height $x$ next to a tower of height $5-x$ with the opponent color, we have to put our tower to the opposite tower. It will be explained in our successors function.
+
 \subsection{Describe your successors function.}
+
+As explained earlier in our successors function we first expand nodes that lock a tower. By that we mean if there is an opponent tower of height $5-x$ where $x$ is the height of our neighbor tower, we first expand node that allows us to have a complete tower of height 5. \\
+Once all those complementary situations are formed, we filter nodes in two categories. The one we consider not advantageous and the one not (based on the previous question). We first expand nodes we consider advantageous but it may arrive that all nodes are disadvantageous (especially at the end of the game). Therefore we must expand them.
 
 
 \subsection{The cutoff method receives an argument called depth. Explain precisely what is called the depth in the minimax.py implementation.}
@@ -96,10 +113,18 @@ The argument depth is the number of actions to obtain the current state given an
 
 \subsection{Explain why it might be useful (for the Avalam contest) to cut off the search for another reason than the depth. Would it be interesting to consider a changing cutoff function (i.e. it changes according to the advancement of the game).}
 
+The time could influence the cutoff function in the sense that we have only 2.5 minutes to play the game and we have to share time slices for all minimax call. Because the branching factor is higher at the beginning of the gmae, it's more acurate to allocate more time at the beginning and less at the end.\\
+
+The step can also influence the cutoff function because higher is the step number, less are the possibilities for players. \\
+If we consider the step number, we can increase the maximum depth with this step because the branching factor decreases with the step.
 
 
 \subsection{Describe your cut-off function.}
 
+In our cut-off function, we increase the maximum depth proportionally to the step number. Basically, we assign a maximum depth for range of step numbers so as greater is the range step greater is the maximum depth.
+
 \subsection{Describe concisely your super tough agent in your report. Your description shouldn’t be longer than one A4 paper page; if it is the same agent than the one described in earlier sections, just state it, no need to re-explain.}
+
+Our \textit{super\_agent} is the same as our \textit{contest\_agent}.
 
 \end{document}
