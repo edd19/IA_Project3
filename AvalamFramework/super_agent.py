@@ -93,7 +93,8 @@ class Agent:
         for a in actions:
             neighbor = (a[2], a[3])
             if abs(state2[0].m[neighbor[0]][neighbor[1]]) + abs(state2[0].m[action[2]][action[3]]) == 5:
-                return False
+                if state2[0].m[neighbor[0]][neighbor[1]] * state2[0].m[action[2]][action[3]] < 0:
+                    return False
 
         #Action that create immovable tower fot the opponent
         if state2[0].m[action[2]][action[3]] < 0 and state2[0].get_tower_actions_bis(action[2],action[3]) == []:
