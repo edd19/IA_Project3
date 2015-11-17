@@ -35,18 +35,23 @@ class Agent:
         p is the player to play the next move and st is the next
         step number.
         """
-        ommited_actions = []
-        has_ommited_all = True
-        for action in state[0].get_actions():
-            pair = (action, (state[0].clone().play_action(action), state[1]*-1, state[2]+1))
-            if self.toPlay(state,pair[1], pair[0]):
-                has_ommited_all = False
-                yield pair
-            else:
-                ommited_actions.append(pair)
-        if has_ommited_all:
-            for pair in ommited_actions:
-                yield pair
+        force_action = self.force_play(state)
+        if force_action != None:
+            yield (force_action, (state[0].clone().play_action(force_action), state[1]*-1, state[2]+1))
+        else:
+            ommited_actions = [] #List of ommmited actions by the function toPlay()
+            has_ommited_all = True #True if all actions has been ommited by the function toPlay
+            for action in state[0].get_actions():
+                pair = (action, (state[0].clone().play_action(action), state[1]*-1, state[2]+1))
+                if self.toPlay(state,pair[1], pair[0]):
+                    has_ommited_all = False
+                    yield pair
+                else:
+                    ommited_actions.append(pair)
+
+            if has_ommited_all:
+                for pair in ommited_actions:
+                    yield pair
 
 
     def cutoff(self, state, depth):
@@ -54,6 +59,12 @@ class Agent:
         search has to stop; false otherwise.
         """
         max_depth = 1
+
+        #Depth increase with step number
+        if state[2]>= 25:
+            max_depth=5
+        elif state[2]>= 20:
+            max_depth=3
 
         if state[0].is_finished():
             return True
@@ -65,7 +76,6 @@ class Agent:
         """The evaluate function must return an integer value
         representing the utility function of the board.
         """
-
         return state[0].get_evaluation()
 
     def play(self, board, player, step, time_left):
@@ -79,8 +89,28 @@ class Agent:
         state = (newBoard, player, step)
         return minimax.search(state, self)
 
-    def toPlay(self, state1, state2, action):
+    def force_play(self, state):
+        """ Force the agent to create a tower of 5 if possible
+            by decreasing the opponent's score."""
+        board = state[0]
+        for i, j, h in board.get_towers():
+            #Only way to form tower of 5 is 2+3 and 4+1
+            #We check therefore for towers of height of 3 and 4
+            if abs(h) == 3 or abs(h) == 4:
+                actions=state[0].get_tower_actions(i,j)
+                for action in actions:
+                    pos1 = state[0].m[i][j]
+                    pos2 = state[0].m[action[2]][action[3]]
+                    #If we can form a tower of 5 by moving a tower on a opponent's one.
+                    if pos1*pos2<0 and abs(pos1)+abs(pos2)==5:
+                        if pos1>0:
+                            return (i, j, action[2], action[3])
+                        else:
+                            return (action[2], action[3], i, j)
+        return None
 
+    def toPlay(self, state1, state2, action):
+        """ Return false if the action shoudln't be played."""
         #Action that decrease our score
         delta_score = state2[0].get_players_score()[0] - state1[0].get_players_score()[0]
         if delta_score < 0 :

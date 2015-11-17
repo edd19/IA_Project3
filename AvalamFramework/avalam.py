@@ -138,7 +138,7 @@ class Board:
                         yield action
 
     def get_tower_actions_bis(self, i, j):
-        """Yield all actions with moving tower (i,j)"""
+        """Return all actions with moving tower (i,j)"""
         h = abs(self.m[i][j])
         actions = []
         if h > 0 and h < self.max_height:
@@ -213,6 +213,7 @@ class Board:
         return score
 
     def get_players_score(self):
+        """ Return the score of current player and opponent player. """
         score1 = 0
         score2 = 0
         for i in range(self.rows):
@@ -224,7 +225,14 @@ class Board:
         return (score1, score2)
 
     def get_evaluation(self):
+        """ Evaluation method for the evaluate function of an agent.
+            Return the difference of towers between the two players.
+            It it's zero, return the difference of towers of height 3 of
+            the opponent surrounded by at least two towers of height 2 of the player.
+            If it's zero, return the difference of tower of height 5 between
+            the two players. """
         score = 0
+        #Number of towers
         for i in range(self.rows):
             for j in range(self.columns):
                 if self.m[i][j] < 0:
@@ -232,6 +240,7 @@ class Board:
                 elif self.m[i][j] > 0:
                     score += 1
         if score == 0:
+        #Number of towers of height 3 surrounded
             for i in range(self.rows):
                 for j in range(self.columns):
                     actions = self.get_tower_actions_bis(i,j)
@@ -250,6 +259,7 @@ class Board:
                         if n >=2:
                             score -= 1
         if score == 0:
+        #Number of towers of height 5
             for i in range(self.rows):
                 for j in range(self.columns):
                     if self.m[i][j] == -self.max_height:
