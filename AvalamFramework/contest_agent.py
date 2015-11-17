@@ -61,7 +61,7 @@ class Agent:
         max_depth = 1
 
         #Depth increase with step number
-        if state[2]>= 25:
+        if state[2]>= 30:
             max_depth=5
         elif state[2]>= 20:
             max_depth=3
