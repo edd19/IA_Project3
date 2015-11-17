@@ -99,10 +99,6 @@ class Agent:
         if state2[0].m[action[2]][action[3]] < 0 and state2[0].get_tower_actions_bis(action[2],action[3]) == []:
             return False
 
-        #Action that create a tower of 4 for the opponent
-        if state2[0].m[action[2]][action[3]] == 4 or state2[0].m[action[2]][action[3]] ==  -4:
-            return False
-
         return True
 
 
