@@ -53,9 +53,12 @@ class Agent:
         """The cutoff function returns true if the alpha-beta/minimax
         search has to stop; false otherwise.
         """
-        max_depth = 2
-        #Upgrade the depth depending on the step number
+        max_depth = 1
 
+        if state[2]>= 20:
+            max_depth=3
+        if state[2]>= 25:
+            max_depth=5
         if state[0].is_finished():
             return True
         if depth >= max_depth:
@@ -81,10 +84,14 @@ class Agent:
         return minimax.search(state, self)
 
     def toPlay(self, state1, state2, action):
+
         #Action that decrease our score
-        delta_score = state1[0].get_players_score()[0] - state2[0].get_players_score()[0]
+        delta_score = state2[0].get_players_score()[0] - state1[0].get_players_score()[0]
         if delta_score < 0 :
-            if state2[0].m[action[2]][action[3]]==5:
+            if state1[0].m[action[0]][action[1]] > 0 and state1[0].m[action[2]][action[3]] > 0:
+                if state1[0].get_tower_actions_bis(action[0], action[1]) == [action] and state1[0].get_tower_actions_bis(action[2], action[3]) == [(action[2], action[3], action[0], action[1])]:
+                    return False
+            elif state2[0].m[action[2]][action[3]]==5:
                 return True
             return False
 
