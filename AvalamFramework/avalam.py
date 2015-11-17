@@ -211,6 +211,7 @@ class Board:
                     elif self.m[i][j] == self.max_height:
                         score += 1
         return score
+
     def get_players_score(self):
         score1 = 0
         score2 = 0
@@ -226,19 +227,28 @@ class Board:
         score = 0
         for i in range(self.rows):
             for j in range(self.columns):
-                if self.m[i][j] == -3:
-                    n=0 # number of 1 next to the 3
-                    for action in self.get_tower_actions(i,j):
-                        if self.m[action[2]][action[3]] == 1:
-                            n += 1 # Peut etre faire un break
-                    if n>=2:
-                        score += 2     
-
-                elif self.m[i][j] < 0:
+                if self.m[i][j] < 0:
                     score -= 1
                 elif self.m[i][j] > 0:
                     score += 1
-
+        if score == 0:
+            for i in range(self.rows):
+                for j in range(self.columns):
+                    actions = self.get_tower_actions_bis(i,j)
+                    if self.m[i][j] == -3:
+                        n=0
+                        for action in actions:
+                            if self.m[action[2]][action[3]] == 1:
+                                n += 1
+                        if n >=2:
+                            score += 1
+                    elif self.m[i][j] == 3:
+                        n=0
+                        for action in actions:
+                            if self.m[action[2]][action[3]] == -1:
+                                n += 1
+                        if n >=2:
+                            score -= 1
         if score == 0:
             for i in range(self.rows):
                 for j in range(self.columns):
@@ -246,7 +256,7 @@ class Board:
                         score -= 1
                     elif self.m[i][j] == self.max_height:
                         score += 1
-        return score        
+        return score
 
 
 
@@ -316,6 +326,6 @@ class Agent:
         ArgumentParser and the options dictionary. It can be used to
         configure the agent based on the custom options. (None to
         disable)
-  
+
     """
     pass

@@ -53,12 +53,12 @@ class Agent:
         """The cutoff function returns true if the alpha-beta/minimax
         search has to stop; false otherwise.
         """
-        max_depth = 1
-        if state[2] > 20:
-            max_depth = 4
+        max_depth = 2
+        #Upgrade the depth depending on the step number
+
         if state[0].is_finished():
             return True
-        if depth > max_depth:
+        if depth >= max_depth:
             return True
         return False
 
@@ -67,7 +67,7 @@ class Agent:
         representing the utility function of the board.
         """
 
-        return state[0].get_score()
+        return state[0].get_evaluation()
 
     def play(self, board, player, step, time_left):
         """This function is used to play a move according
@@ -98,10 +98,6 @@ class Agent:
 
         #Action that create immovable tower fot the opponent
         if state2[0].m[action[2]][action[3]] < 0 and state2[0].get_tower_actions_bis(action[2],action[3]) == []:
-            return False
-
-        #Action that create a tower of 4 for the opponent
-        if state2[0].m[action[2]][action[3]] == 4 or state2[0].m[action[2]][action[3]] ==  -4:
             return False
 
         return True
