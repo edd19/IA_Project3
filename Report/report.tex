@@ -112,8 +112,8 @@ States that can be ignored are the one where we decrease our score. As this game
 We found other states that can be ignored because they lead to bad situations:
 
 \begin{itemize}
-\item Give a tower to the opponent (fig.\ref{states_ignored}). That case can occur by forming a tower of height five for the opponent, or forming a tower with opponent counter at top and we don't have the possibility to regain that tower. By that we mean that the tower cannot be moved (for example if the tower become isolated).
-\item Create a tower of height $x$ next to a tower of height $5-x$ with a different color in the neighborhood. This is a very bad situation where the opponent can exploit that to create directly a tower of height five. 
+\item Give a tower to the opponent. That case can occur by forming a tower of height five for the opponent, or forming a tower with opponent counter at top and we don't have the possibility to regain that tower. By that we mean that the tower cannot be moved (for example if the tower become isolated).
+\item Create a tower of height $x$ next to a tower of height $5-x$ with a different color in the neighborhood. This is a very bad situation where the opponent can exploit that to create directly a tower of height five (fig.\ref{states_ignored}). 
 \end{itemize}
 
 \begin{figure}[h]
