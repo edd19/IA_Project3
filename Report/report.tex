@@ -41,12 +41,12 @@ Assignement 3 : Adversarial Search}
 \subsection{Can the nodes be ordered in such a way that Alpha-Beta pruning can cut off more branches (in a left-to right node expansion)? If no, explain why; if yes, give the new ordering and the resulting new pruning.}
 
 Yes, if we order the nodes in increasing order like shown in Figure \ref{alphabetanodes}, the Alpha-Beta pruning will cut off more branches. The nodes must be set in that order because it's MIN that chooses the action to pick in the bottom of the tree.
-The idea is to first examine the best node at each depth (Min or Max) \\
-\begin{itemize}
-	\item For max nodes, we want to visit the best child (>=) first so that time is not wasted in the rest of the children exploring worse scenarios.
-	\item For min nodes, we want to visit the worst child first
-\end{itemize}
-If we reorder all the tree in that way, we can pass more childrens nodes because at the parent level all those childrens nodes will imply a cutoff.
+%The idea is to first examine the best node at each depth (Min or Max) \\
+%\begin{itemize}
+%	\item For max nodes, we want to visit the best child first so that time is not wasted in the rest of the children exploring worse scenarios.
+%	\item For min nodes, we want to visit the worst child first
+%\end{itemize}
+%If we reorder all the tree in that way, we can pass more childrens nodes because at the parent level all those childrens nodes will imply a cutoff.
 
 
 \begin{figure}[h]
